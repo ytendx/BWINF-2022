@@ -3,6 +3,7 @@ package de.ytendx.bwinf.tasks.container;
 import de.ytendx.bwinf.io.impl.ContainerInput;
 import de.ytendx.bwinf.tasks.Id;
 import de.ytendx.bwinf.tasks.Task;
+import de.ytendx.bwinf.utils.Pair;
 import de.ytendx.bwinf.utils.Preconditions;
 
 import java.io.BufferedReader;
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
 public class ContainerTask implements Task<ContainerInput> {
     @Override
     public void execute(ContainerInput input) {
-        System.out.println("Bitte gebe die container file an:");
+        System.out.println("Bitte gib die container file an:");
         var bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
         String fileName = null;
@@ -33,50 +34,81 @@ public class ContainerTask implements Task<ContainerInput> {
 
         input.read(fileName);
 
-        var output = new int[this.getMaxContainer(input)];
+        // Doing it like you should ;) XDP style <3
 
-        var currentIndex = 0;
+        var buffer = new int[getMaxContainer(input)];
+        var cursor = 0;
 
-        List<Integer> alreadySortedIDs = new CopyOnWriteArrayList<>();
+        for(var pair : input.getContainerInput()){
+            var heavyPos = getPosition(pair.getA(), buffer);
+            var lightPos = getPosition(pair.getB(), buffer);
 
-        for (int i = 0; i < output.length; i++){
-            var lighter = heavierThenTheOthers(i+1, input);
+            handle: {
+                if (heavyPos == -1 && lightPos == -1) {
+                    move(cursor, buffer.length-1, buffer);
+                    move(cursor, buffer.length-1, buffer);
+                    buffer[cursor] = pair.getB();
+                    cursor++;
+                    buffer[cursor] = pair.getA();
+                    break handle;
+                }
 
-            System.out.println(i+1 + " is heavier then " + Arrays.toString(lighter.toArray()));
+                // Only one is possible because of the above statement
+                if (heavyPos == -1) {
+                    cursor = lightPos + 1;
+                    move(cursor, buffer.length-1, buffer);
+                    buffer[cursor] = pair.getA();
+                    break handle;
+                }
 
-            if (lighter.size() == 0){
-                output[currentIndex] = i+1;
-                currentIndex++;
+                if (lightPos == -1) {
+                    move(0, buffer.length-1, buffer);
+                    buffer[cursor] = pair.getB();
+                    break handle;
+                }
+
+                // This gets executed when both are already in the buffer
+                if (lightPos < heavyPos){
+                    // Just let it go cause its already in the right order
+                    break handle;
+                }
+
+                moveBack(heavyPos+1, lightPos, buffer);
+                cursor = lightPos;
+                buffer[cursor] = pair.getA();
             }
+
+            // Reset cursor
+            cursor = 0;
         }
 
-        for (int i = 0; i < output.length; i++){
-            var lighter = heavierThenTheOthers(i+1, input);
-
-            check(i+1, input, currentIndex, output, lighter, alreadySortedIDs);
-        }
-
-        System.out.println("End: " + Arrays.toString(output));
+        System.out.println(Arrays.toString(buffer));
     }
 
-    public void check(int container, ContainerInput input, int currentIndex, int[] output, List<Integer> lighter, List<Integer> alreadySortedIDs){
-        for (int light : lighter) {
-            var lightLighter = heavierThenTheOthers(light, input);
-
-            check(light, input, currentIndex, output, lightLighter, alreadySortedIDs);
+    public int getPosition(int val, int[] data){
+        for (int cursor = 0; cursor < data.length; cursor++){
+            if (data[cursor] == val){
+                return cursor;
+            }
         }
 
-        var max = getMax(Arrays.copyOf(lighter.toArray(), lighter.size(), Integer[].class));
+        return -1;
+    }
 
-        if (!alreadySortedIDs.contains(container)){
-            if (max == 0){
-                output[currentIndex] = container;
-                currentIndex++;
-                alreadySortedIDs.add(container);
-                return;
-            }
+    public void move(int from, int till, int[] data){
 
-            output[getMax(Arrays.copyOf(lighter.toArray(), lighter.size(), Integer[].class))-1] = container;
+        int[] readData = data.clone();
+
+        for(int i = from; i < till; i++){
+            var v = readData[i];
+            data[i+1] = v;
+        }
+    }
+
+    public void moveBack(int from, int till, int[] data){
+        int[] readData = data.clone();
+        for(int i = from; i <= till; i++){
+            data[i-1] = readData[i];
         }
     }
 
