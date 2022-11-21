@@ -16,9 +16,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 @Id(name = "container")
-public class ContainerTask implements Task<ContainerInput> {
+public class ContainerTask implements Task {
     @Override
-    public void execute(ContainerInput input) {
+    public void execute() {
+        ContainerInput input = new ContainerInput();
+
         System.out.println("Bitte gib die container file an:");
         var bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 

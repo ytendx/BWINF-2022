@@ -6,6 +6,8 @@ import de.ytendx.bwinf.utils.Preconditions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,29 +27,25 @@ public class PairInput implements TaskInput {
     @Override
     public void read(String... args) {
         var fileName = args[0];
-        Preconditions.require(fileName != null && fileName.endsWith(".csv"));
+        Preconditions.require(fileName != null && fileName.endsWith(".txt"));
 
         var file = new File(fileName);
 
         Preconditions.require(file.exists(), "The given file with name " + fileName + " does not exist.");
 
         try {
-            var scanner = new Scanner(file);
+            var content = new String(Files.readAllBytes(file.toPath()));
 
-            int errorCount = 0;
+            for(var line : content.split("\n")) {
+                for(var line2 : content.split("\n")) {
+                    if (line.equals(line2)){
+                        continue;
+                    }
 
-            while (scanner.hasNext()){
-                errorCount++;
-                var line = scanner.nextLine();
-
-                var splittedLine = line.split(",");
-
-                Preconditions.require(splittedLine.length == 2, "Line number " + errorCount + " did not full fill all requirements (Invalid arg length (No pair))");
-
-                pairs.add(new Pair<>(splittedLine[0], splittedLine[1]));
+                    pairs.add(new Pair<>(line, line2));
+                }
             }
-
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

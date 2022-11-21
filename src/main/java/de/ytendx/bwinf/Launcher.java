@@ -2,6 +2,7 @@ package de.ytendx.bwinf;
 
 import de.ytendx.bwinf.io.impl.ContainerInput;
 import de.ytendx.bwinf.io.impl.PairInput;
+import de.ytendx.bwinf.io.impl.TextInput;
 import de.ytendx.bwinf.tasks.Task;
 import de.ytendx.bwinf.tasks.TaskRegistry;
 import java.io.BufferedReader;
@@ -20,7 +21,7 @@ public class Launcher {
 
         Optional<Task> reimereiTask = taskRegistry.getTask(bufferedReader.readLine());
 
-        reimereiTask.get().execute(new ContainerInput()); // TODO: Improve
+        reimereiTask.get().execute();
     }
 
 

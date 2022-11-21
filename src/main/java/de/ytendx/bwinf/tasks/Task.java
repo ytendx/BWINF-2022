@@ -2,8 +2,8 @@ package de.ytendx.bwinf.tasks;
 
 import de.ytendx.bwinf.io.TaskInput;
 
-public interface Task<T extends TaskInput> {
+public interface Task {
 
-    void execute(T taskInput);
+    void execute();
 
 }

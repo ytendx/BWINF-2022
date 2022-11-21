@@ -19,12 +19,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 @Id(name = "reimerei")
-public class ReimereiTask implements Task<PairInput> {
+public class ReimereiTask implements Task {
     private static final List<Character> VOCALS = List.of('a', 'e', 'i', 'o', 'u', 'ä', 'ö', 'ü');
 
     @Override
-    public void execute(PairInput input) {
-        System.out.println("Bitte gebe die csv file an:");
+    public void execute() {
+        PairInput input = new PairInput();
+
+        System.out.println("Bitte gebe die leider keine csv file an:");
         var bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
         String fileName = null;
