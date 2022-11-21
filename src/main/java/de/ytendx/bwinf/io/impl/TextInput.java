@@ -8,8 +8,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.Scanner;
 
-import static de.ytendx.bwinf.utils.BastisKrankerShit.jout;
-
 public class TextInput implements TaskInput {
     public String getText() {
         return text;

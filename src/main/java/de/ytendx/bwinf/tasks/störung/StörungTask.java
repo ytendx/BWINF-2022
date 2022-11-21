@@ -1,20 +1,14 @@
-package de.ytendx.bwinf.tasks.Störung;
+package de.ytendx.bwinf.tasks.störung;
 
-import de.ytendx.bwinf.io.TaskInput;
-import de.ytendx.bwinf.io.impl.PairInput;
 import de.ytendx.bwinf.io.impl.TextInput;
 import de.ytendx.bwinf.tasks.Id;
 import de.ytendx.bwinf.tasks.Task;
-import de.ytendx.bwinf.utils.Pair;
 import de.ytendx.bwinf.utils.Preconditions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.regex.Pattern;
-
-import static de.ytendx.bwinf.utils.BastisKrankerShit.jout;
-
 @Id(name = "sto")
 public class StörungTask implements Task<TextInput>{
     @Override

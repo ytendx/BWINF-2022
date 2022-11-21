@@ -1,11 +1,9 @@
 package de.ytendx.bwinf;
 
+import de.ytendx.bwinf.io.impl.ContainerInput;
 import de.ytendx.bwinf.io.impl.PairInput;
-import de.ytendx.bwinf.io.impl.TextInput;
 import de.ytendx.bwinf.tasks.Task;
 import de.ytendx.bwinf.tasks.TaskRegistry;
-import de.ytendx.bwinf.tasks.reimerei.ReimereiTask;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,7 +20,8 @@ public class Launcher {
 
         Optional<Task> reimereiTask = taskRegistry.getTask(bufferedReader.readLine());
 
-        reimereiTask.get().execute(new PairInput());
+        reimereiTask.get().execute(new ContainerInput()); // TODO: Improve
     }
+
 
 }

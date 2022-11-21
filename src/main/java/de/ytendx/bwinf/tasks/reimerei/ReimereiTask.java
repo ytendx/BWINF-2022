@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static de.ytendx.bwinf.utils.BastisKrankerShit.jout;
 
 @Id(name = "reimerei")
 public class ReimereiTask implements Task<PairInput> {
@@ -63,12 +62,12 @@ public class ReimereiTask implements Task<PairInput> {
             return check1 && check2 && check3;
         }).toList();
 
-        jout("\n\n------------------------------------------------------");
-        jout("ERGEBNISSE");
-        jout("------------------------------------------------------\n");
+        System.out.println("\n\n------------------------------------------------------");
+        System.out.println("ERGEBNISSE");
+        System.out.println("------------------------------------------------------\n");
 
         output.forEach(stringStringPair -> {
-            jout(stringStringPair.getA() + "," + stringStringPair.getB());
+            System.out.println(stringStringPair.getA() + "," + stringStringPair.getB());
         });
 
     }
